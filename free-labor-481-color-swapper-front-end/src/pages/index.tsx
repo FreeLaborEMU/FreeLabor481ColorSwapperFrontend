@@ -2,10 +2,16 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
+import ColorList from '../components/color-list'
+import { Color } from '../components/color'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+
+
+export default function Home({ color }:{color:Color}) {
+  var localColor: Color;
+  localColor = new Color('tesingColor');
   return (
     <>
       <Head>
@@ -20,8 +26,25 @@ export default function Home() {
         </div>
         <div>
           <p>Backlog Item 3 Space</p>
+          <ColorList color={localColor}/>
         </div>
       </main>
     </>
   )
+}
+
+export async function getStaticProps() {
+  //Color URL
+  // const response = await fetch('')
+  // const data = await response.json()
+  // console.log(data)
+  // var color: Color;
+  // color = new Color('tesingColor');
+
+  return{
+    props: {
+      // users: data,
+      // color: color
+    },
+  }
 }
