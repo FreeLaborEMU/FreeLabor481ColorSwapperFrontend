@@ -29,3 +29,4 @@ This is my last semester at Eastern Michigan. I've used many languages during my
 Other than that, I love to Cook, Garden, Hike/Camp, Computer Game, as well as playing Tabletop games.
 
 ### [Jacob Eisenstein](https://github.com/jeisenst)
+This will be my second to last semester at Eastern. I've been learning programming since high school and hope to go into the industry after graduation. I love baseball & gaming.
