@@ -1,31 +1,38 @@
-# FreeLabor481ColorSwapperFrontend
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-Team Name: Free Labor
+## Getting Started
 
-We are creating a brick palette analyzer tool for https://brickmaniac.com/
+First, run the development server:
 
-# Resources:
-[Drive Link](https://drive.google.com/drive/u/2/folders/1K710zoNXyk16zgeNn4rHGWfX0nVB6qtu)
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-# Team Members:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### [Daniel Thompson](https://github.com/danthomps1999)
-Senior in final semester (LORD willing). Working as an Associate Software Developer at Auto-Owners Insurance in HR-Systems.
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-### [Kevin Hammermeister](https://github.com/khammerm)
-I am currently finishing my last semester at Eastern Michigan pursuing a degree in Computer Science. During my education I have become proficent in many languages, such as Java, C, Python, and Assembly/Machine languages.
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-### [Nick Garska](https://github.com/Nick-Garska)
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-after early collage im now finishing what I started hopefuly this semester I enjoy backend programing, algorithms and have an intresset in AI
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-### [Solomon Hatchett](https://github.com/SoloTHatt)
+## Learn More
 
-This will most likely be my last year at Eastern Michigan University. I transferred here from Monroe Community College and and proficient in C sharp, C++ and Java. My hobbies including video games, TV and coding for fun.
+To learn more about Next.js, take a look at the following resources:
 
-### [Todd Shmayda](https://github.com/Desh776)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-This is my last semester at Eastern Michigan. I've used many languages during my time here, but I have grown accustom to using C languages and Java/Java Script.
-Other than that, I love to Cook, Garden, Hike/Camp, Computer Game, as well as playing Tabletop games.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-### [Jacob Eisenstein](https://github.com/jeisenst)
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
