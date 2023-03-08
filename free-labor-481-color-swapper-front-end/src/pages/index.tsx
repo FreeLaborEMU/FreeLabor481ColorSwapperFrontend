@@ -8,7 +8,7 @@ import "firebase/firestore"
 import { env } from 'process';
 const inter = Inter({ subsets: ['latin'] })
 
-var imageFile;
+var imageFile: any;
 
 const firebaseConfig = {
 
@@ -38,6 +38,10 @@ function hello(images:any)
 {
   imageFile=images[0];
 
+}
+
+function clicking()
+{
   const meta={
   
 		contentType: imageFile.type
@@ -56,7 +60,6 @@ function hello(images:any)
     }
 
     );}
-
  
 
 export default function Home() {
@@ -76,6 +79,7 @@ export default function Home() {
           height={500}
           alt=""/>
           <input type='file'  accept='image./png' onChange={(images)=>hello(images.target.files)}></input>
+          <button  id="btn" onClick={clicking}>Upload</button>
         </div>
         <div>
           <p>Backlog Item 3 Space</p>
