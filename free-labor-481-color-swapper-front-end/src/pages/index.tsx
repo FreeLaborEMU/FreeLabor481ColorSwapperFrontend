@@ -2,8 +2,65 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
-
+import { initializeApp } from "firebase/app";
+import {getStorage, ref ,uploadBytesResumable,getDownloadURL} from 'firebase/storage'
+import "firebase/firestore"
+import { env } from 'process';
 const inter = Inter({ subsets: ['latin'] })
+
+var imageFile: any;
+
+const firebaseConfig = {
+
+  apiKey:"AIzaSyDt9XmPpyC578583K5H2n4e50p6Lj3qa08",
+
+  authDomain: "colorswapper-f6b50.firebaseapp.com",
+
+  projectId: "colorswapper-f6b50",
+
+  storageBucket: "colorswapper-f6b50.appspot.com",
+
+  messagingSenderId: "617843414878",
+
+  appId: "1:617843414878:web:80925e8c80b5f3ff84e1cf",
+
+  measurementId: "G-0B05VSYTPH"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const storage =getStorage();
+
+var checking="";
+
+function hello(images:any)
+{
+  imageFile=images[0];
+
+}
+
+function clicking()
+{
+  const meta={
+  
+		contentType: imageFile.type
+		}
+	let store= ref(storage,"images/Oringal");
+  let storeCopy=ref(storage,"images/Copy");
+	let upload=uploadBytesResumable(store,imageFile,meta);
+  let Copyupload=uploadBytesResumable(storeCopy,imageFile,meta);
+	var imageurl =ref(storage,"image/photo");
+
+
+  getDownloadURL(store).then(function(url){
+  
+    checking=url; 
+    
+    }
+
+    );}
+ 
 
 export default function Home() {
   return (
@@ -17,6 +74,12 @@ export default function Home() {
       <main className={styles.main}>
         <div>
           <p>Backlog Item 1 Space</p>
+          <Image src={checking}
+          width={500}
+          height={500}
+          alt=""/>
+          <input type='file'  accept='image./png' onChange={(images)=>hello(images.target.files)}></input>
+          <button  id="btn" onClick={clicking}>Upload</button>
         </div>
         <div>
           <p>Backlog Item 3 Space</p>
