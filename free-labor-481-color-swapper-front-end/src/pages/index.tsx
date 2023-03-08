@@ -2,7 +2,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
-import ColorList from '../components/color-list'
+import ColorListItem from '../components/color-list-item'
+import ColorListArray from '../components/color-list-array'
+import AustinList from '../components/austin-list'
 import { Color } from '../components/color'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -12,6 +14,17 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home({ color }:{color:Color}) {
   var localColor: Color;
   localColor = new Color('tesingColor');
+  var localColor2: Color;
+  localColor2 = new Color('tesingColor2');
+  var localColor3: Color;
+  localColor3 = new Color('tesingColor3');
+
+  var colors: Color[] = [];
+  colors.push(localColor);
+  colors.push(localColor2);
+  colors.push(localColor3);
+
+
   return (
     <>
       <Head>
@@ -26,7 +39,14 @@ export default function Home({ color }:{color:Color}) {
         </div>
         <div>
           <p>Backlog Item 3 Space</p>
-          <ColorList color={localColor}/>
+          <ul>
+            {/* <ColorListItem color={localColor}/> */}
+            {/* <ColorListArray colorList={colors}/> */}
+            <AustinList colorList={colors}></AustinList>
+          </ul>
+          <ul className="java-script-list">
+
+          </ul>
         </div>
       </main>
     </>

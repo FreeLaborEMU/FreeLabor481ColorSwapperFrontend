@@ -1,7 +1,7 @@
 import { Color } from './color'
 
-function ColorList({ color }){
-    return (
+function ColorListItem({ color }){
+    return (    
         <>
             <p>Color List</p>
             <p>{color.name}</p>
@@ -9,4 +9,4 @@ function ColorList({ color }){
     )
 }
 
-export default ColorList
+export default ColorListItem
