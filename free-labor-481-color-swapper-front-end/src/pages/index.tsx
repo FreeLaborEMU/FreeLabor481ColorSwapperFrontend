@@ -8,7 +8,13 @@ import "firebase/firestore"
 import { env } from 'process';
 const inter = Inter({ subsets: ['latin'] })
 
+
+
+
+// Store image file inside
 var imageFile: any;
+
+// Get the Config to the firebase for connection
 
 const firebaseConfig = {
 
@@ -28,31 +34,56 @@ const firebaseConfig = {
 
 };
 
+// Intialize the firebase
 const app = initializeApp(firebaseConfig);
 
+// Get the storgae location in firbase
 const storage =getStorage();
 
+
+
+// Check for any changes in src
 var checking="";
 
-function hello(images:any)
+
+
+// Get image file from file input
+function Getfile(images:any)
 {
+  // input store files into a array and is at first place of the array
   imageFile=images[0];
 
 }
 
-function clicking()
+
+
+// Send file ro the firebase on button click
+function Clicking()
 {
+
+
+// Get type from image file
   const meta={
   
 		contentType: imageFile.type
 		}
+
+
+
+  // Get storage location and add to new file location before sending to firebase.
+  // ref ask the storage and location for the file to put it in a readable format for the upload.
 	let store= ref(storage,"images/Oringal");
   let storeCopy=ref(storage,"images/Copy");
+
+  // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 	let upload=uploadBytesResumable(store,imageFile,meta);
   let Copyupload=uploadBytesResumable(storeCopy,imageFile,meta);
-	var imageurl =ref(storage,"image/photo");
 
 
+  // Example of get file location
+	// ref(storage,"image/photo");
+
+// Get store locactaion to url
   getDownloadURL(store).then(function(url){
   
     checking=url; 
@@ -78,8 +109,8 @@ export default function Home() {
           width={500}
           height={500}
           alt=""/>
-          <input type='file'  accept='image./png' onChange={(images)=>hello(images.target.files)}></input>
-          <button  id="btn" onClick={clicking}>Upload</button>
+          <input type='file'  accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
+          <button  id="btn"  onClick={Clicking}>Upload</button>
         </div>
         <div>
           <p>Backlog Item 3 Space</p>
