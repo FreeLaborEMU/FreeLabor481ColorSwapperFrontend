@@ -39,14 +39,7 @@ export default function Home({ color }:{color:Color}) {
         </div>
         <div>
           <p>Backlog Item 3 Space</p>
-          <ul>
-            {/* <ColorListItem color={localColor}/> */}
-            {/* <ColorListArray colorList={colors}/> */}
-            <AustinList colorList={colors}></AustinList>
-          </ul>
-          <ul className="java-script-list">
-
-          </ul>
+          <AustinList colorList={colors}></AustinList>
         </div>
       </main>
     </>

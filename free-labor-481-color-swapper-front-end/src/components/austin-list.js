@@ -13,7 +13,7 @@ import styles from '../styles/feature3.module.css'
 //   ];
   function AustinList({colorList}) {
     return (
-      <ul className={styles.box}>
+      <ul className={styles.colorList}>
         {colorList.map((color) => <AustinListItem color={color} key={color.name}/>)}
       </ul>
     );
