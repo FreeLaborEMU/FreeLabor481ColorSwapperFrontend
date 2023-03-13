@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
-
+import { getStorage } from "firebase/storage";
 const inter = Inter({ subsets: ['latin'] })
 
 // Import the functions you need from the SDKs you need
@@ -14,8 +14,15 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-
+  apiKey: "AIzaSyDt9XmPpyC578583K5H2n4e50p6Lj3qa08",
+  authDomain: "colorswapper-f6b50.firebaseapp.com",
+  projectId: "colorswapper-f6b50",
+  storageBucket: "colorswapper-f6b50.appspot.com",
+  messagingSenderId: "617843414878",
+  appId: "1:617843414878:web:80925e8c80b5f3ff84e1cf",
+  measurementId: "G-0B05VSYTPH"
 };
+const storage = getStorage(app);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
