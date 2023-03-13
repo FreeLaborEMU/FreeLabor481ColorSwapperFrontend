@@ -92,8 +92,8 @@ let storeCopy=ref(storage,"images/"+names+"/Copy");;
 	// ref(storage,"image/photo");
 
 
-    console.log("heb");
-    for(var i=10000 ;i<=0;i--)
+    //Wait until its the url is ready.
+    for(var i=1000 ;i<=0;i--)
     {
 
       // Get store locactaion to url
@@ -101,19 +101,12 @@ let storeCopy=ref(storage,"images/"+names+"/Copy");;
   getDownloadURL(storeCopy).then(function(url2){
    
 
-  // Add a new document in collection "cities"
-    setDoc(doc(db, "users",names), {
-
-    orginal: url,
-    copy: url2,
-    index: url
-
-     });
+  //
 
 
    });}
 
-);
+   );
     }
 
 
