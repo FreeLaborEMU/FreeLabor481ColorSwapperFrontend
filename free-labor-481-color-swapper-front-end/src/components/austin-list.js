@@ -14,7 +14,7 @@ import { Color } from './color'
   function AustinList({colorList}) {
     return (
       <ul>
-        {colorList.map((color) => <AustinListItem color={color} />)}
+        {colorList.map((color) => <AustinListItem color={color} key={color.name}/>)}
       </ul>
     );
   }
