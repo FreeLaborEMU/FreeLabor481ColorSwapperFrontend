@@ -1,4 +1,5 @@
 import { Color } from './color'
+import styles from '../styles/feature3.module.css'
 
 // const items = [
 //     {
@@ -10,10 +11,9 @@ import { Color } from './color'
 //       subtitle: 'Subtitle 2'
 //     }
 //   ];
-  
   function AustinList({colorList}) {
     return (
-      <ul>
+      <ul className={styles.box}>
         {colorList.map((color) => <AustinListItem color={color} key={color.name}/>)}
       </ul>
     );
