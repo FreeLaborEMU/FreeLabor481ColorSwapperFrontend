@@ -13,11 +13,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home({ color }:{color:Color}) {
   var localColor: Color;
-  localColor = new Color('tesingColor');
+  localColor = new Color('red', '255', '0', '0');
   var localColor2: Color;
-  localColor2 = new Color('tesingColor2');
+  localColor2 = new Color('green', '0', '255', '0');
   var localColor3: Color;
-  localColor3 = new Color('tesingColor3');
+  localColor3 = new Color('blue', '0', '0', '255');
 
   var colors: Color[] = [];
   colors.push(localColor);
