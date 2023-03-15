@@ -141,7 +141,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
   
   
     
-   async function getDownCopy() {
+
    await getDownloadURL(storeCopy).then(function(url2){
         setImage2(url2);
        
@@ -149,7 +149,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
 
   });
  
-   }
+
 
 
  
