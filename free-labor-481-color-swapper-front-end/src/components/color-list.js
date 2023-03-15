@@ -2,6 +2,11 @@ import { Color } from './color'
 import styles from '../styles/feature3.module.css'
 
 
+/*
+* Kudos to Austin Clute, who helped me write this.
+* Hire this guy:
+* https://github.com/Shausti
+*/ 
 
 function componentToHex(c) {
   let hex = c.toString(16);
@@ -14,15 +19,15 @@ function rgbToHex(r, g, b) {
 }
 
 
-  function AustinList({colorList}) {
+  function ColorList({colorList}) {
     return (
       <ul className={styles.colorList}>
-        {colorList.map((color) => <AustinListItem color={color} key={color.name}/>)}
+        {colorList.map((color) => <ColorListItem color={color} key={color.name}/>)}
       </ul>
     );
   }
   
-  function AustinListItem({color}) {
+  function ColorListItem({color}) {
     return (
       <li className={styles.colorListItem}>
         {/* Have to cast to Number, since stored as a string in the data object right now */}
@@ -33,4 +38,4 @@ function rgbToHex(r, g, b) {
   }
 
 
-  export default AustinList
+  export default ColorList
