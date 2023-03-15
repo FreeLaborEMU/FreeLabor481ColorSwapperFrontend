@@ -6,8 +6,7 @@
     border-color: white;
 }
 .colorList {
-    color: pink;
-    /* background-color: white ; */
+    color: white;
     list-style: square;
 }
 .colorListItem {
