@@ -19,10 +19,27 @@ export default function Home({ color }:{color:Color}) {
   var localColor3: Color;
   localColor3 = new Color('blue', '0', '0', '255');
 
+  //Some colors from the actual palette:
+  var custom41: Color;
+  custom41 = new Color('custom 41', '114', '133', '151');
+  var custom11: Color;
+  custom11 = new Color('custom 11', '107', '81', '28');
+  var custom1: Color;
+  custom1 = new Color('custom 1', '11', '33', '26');
+  var custom7: Color;
+  custom7 = new Color('custom 7', '64', '220', '236');
+
   var colors: Color[] = [];
   colors.push(localColor);
   colors.push(localColor2);
   colors.push(localColor3);
+
+
+  //Pushing colors from actual palette:
+  colors.push(custom41);
+  colors.push(custom11);
+  colors.push(custom1);
+  colors.push(custom7);
 
 
   return (
