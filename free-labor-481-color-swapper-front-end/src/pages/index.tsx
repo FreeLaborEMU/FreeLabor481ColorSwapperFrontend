@@ -119,8 +119,8 @@ const meta={
 // Example of get file location
 // ref(storage,"image/photo");
 
-let storeCopy= await ref(storage,"images/"+names+"/Copy");
-let store= await ref(storage,"images/"+names+"/Original");
+let storeCopy=  ref(storage,"images/"+names+"/Copy");
+let store=  ref(storage,"images/"+names+"/Original");
 
 
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
@@ -208,8 +208,8 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
       width={500}
       height={500}
     /> */}
-          
-          <p hidden={hide}>Backlog Item 1 Space</p>
+           <p hidden={hide}>Input User name and file to Convert</p>
+          <p hidden={!hide}>Backlog Item 1 Space</p>
           <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
           <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
@@ -218,7 +218,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
         <img src={imageUrl} height={500} width={500} hidden={!hide}/>
         
         <div>
-          <p hidden={hide}>Backlog Item 3 Space</p>
+          <p hidden={!hide}>Backlog Item 3 Space</p>
           <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         </div>
       </main>
