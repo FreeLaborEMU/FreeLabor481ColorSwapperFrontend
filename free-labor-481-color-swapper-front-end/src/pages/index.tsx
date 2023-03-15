@@ -9,6 +9,7 @@ import { doc, setDoc , getFirestore, documentId} from "firebase/firestore";
 import { env, setUncaughtExceptionCaptureCallback } from 'process';
 import { useState } from 'react';
 import { getURL } from 'next/dist/shared/lib/utils';
+import { start } from 'repl';
 const inter = Inter({ subsets: ['latin'] })
 
 
@@ -44,8 +45,8 @@ const storage =getStorage();
 
 const db = getFirestore();
   
-
-
+//let tempUrl = "https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/images%2Ftemp2%2FOriginal?alt=media&token=6fbc9e9e-3a94-4f2e-ac05-2ca59c6b5b84height={500} width={500";
+let tempUrl ="";
  
 
 export default function Home() {
@@ -62,7 +63,7 @@ var imageFile: any;
 
 
 // Starting image
-var starturl="/enter.png";
+var starturl="gs://colorswapper-f6b50.appspot.com/images/";
 
 
 // useState are sets of values and array that can change onloading and change elements
@@ -77,6 +78,8 @@ var starturl="/enter.png";
 
   //Get changes for image src 
   const [imageUrl,setImage]=useState(starturl);
+
+  const [imageUrl2,setImage2]=useState(starturl);
   // Start value for user name
 
 
@@ -117,23 +120,21 @@ const meta={
 // ref(storage,"image/photo");
 
 let storeCopy= await ref(storage,"images/"+names+"/Copy");
-let store= await ref(storage,"images/"+names+"/Oringal");
+let store= await ref(storage,"images/"+names+"/Original");
 
 
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 let upload=await uploadBytesResumable(store,imageFile,meta);
 let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
-
-
-store= await ref(storage,"images/"+names+"/Oringal")
    
 
     
     // Store url of firebase location using store ref
     await getDownloadURL(store).then(function(url){
        
-      
-       console.log(url)
+      tempUrl = url;
+      setImage(url);
+
       });
 
    
@@ -142,7 +143,7 @@ store= await ref(storage,"images/"+names+"/Oringal")
     
    async function getDownCopy() {
    await getDownloadURL(storeCopy).then(function(url2){
-        
+        setImage2(url2);
        
    // setImage();
 
@@ -158,7 +159,7 @@ store= await ref(storage,"images/"+names+"/Oringal")
     
        if(imageFile!=null && names!="")
         {
-
+          
           Upload();
           setErrorhide(true);
           setHidden(true);
@@ -173,9 +174,9 @@ store= await ref(storage,"images/"+names+"/Oringal")
           setError("Error: User has not selected a file or not input user name")
      
         }
-    
+        
     }
-
+    
     
   
   
@@ -199,22 +200,26 @@ store= await ref(storage,"images/"+names+"/Oringal")
         <div>
            <h1 hidden={!hide}>Images is now uploaded</h1>
           <p color='red' hidden={errorhide}>{error} </p>
-          <Image
+          {/* <Image
           hidden={!hide}
           // Image area is stored here but can't get from url from other places
       src={imageUrl}
       alt=""
       width={500}
       height={500}
-    />
+    /> */}
+          
           <p hidden={hide}>Backlog Item 1 Space</p>
           <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
           <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
           
         </div>
+        <img src={imageUrl} height={500} width={500} hidden={!hide}/>
+        
         <div>
           <p hidden={hide}>Backlog Item 3 Space</p>
+          <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         </div>
       </main>
     </>
