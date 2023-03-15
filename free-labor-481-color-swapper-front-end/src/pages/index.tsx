@@ -6,14 +6,16 @@ import { initializeApp } from "firebase/app";
 import {getStorage, ref ,uploadBytesResumable,getDownloadURL, getBytes} from 'firebase/storage'
 import "firebase/firestore"
 import { doc, setDoc , getFirestore, documentId} from "firebase/firestore"; 
-import { env } from 'process';
+import { env, setUncaughtExceptionCaptureCallback } from 'process';
+import { useState } from 'react';
+import { getURL } from 'next/dist/shared/lib/utils';
+import { start } from 'repl';
 const inter = Inter({ subsets: ['latin'] })
 
 
 
 
-// Store image file inside
-var imageFile: any;
+
 
 // Get the Config to the firebase for connection
 
@@ -42,11 +44,43 @@ const app = initializeApp(firebaseConfig);
 const storage =getStorage();
 
 const db = getFirestore();
+  
+//let tempUrl = "https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/images%2Ftemp2%2FOriginal?alt=media&token=6fbc9e9e-3a94-4f2e-ac05-2ca59c6b5b84height={500} width={500";
+let tempUrl ="";
+ 
+
+export default function Home() {
+ var names="";
+var urlstore="";
+var urlstore2;
+
+// Store image file inside
+var imageFile: any;
 
 
-// Check for any changes in src
-var names: any;
 
+
+
+
+// Starting image
+var starturl="gs://colorswapper-f6b50.appspot.com/images/";
+
+
+// useState are sets of values and array that can change onloading and change elements
+
+// Hides error codes 
+  const [errorhide,setErrorhide]= useState(true);
+
+  //Hide elements after user upload correctly
+  const [hide,setHidden]= useState(false);
+  //Set error messages
+  const [error,setError]= useState("");
+
+  //Get changes for image src 
+  const [imageUrl,setImage]=useState(starturl);
+
+  const [imageUrl2,setImage2]=useState(starturl);
+  // Start value for user name
 
 
  
@@ -65,57 +99,95 @@ function Getfile(images:any){
 }
 
 
-
-// Send file ro the firebase on button click
-function Clicking(){
-
-
+// Send file to the firebase 
+ async function Upload(){
+  
 // Get type from image file
-  const meta={
+const meta={
   
-		contentType: imageFile.type
-		}
+  contentType: imageFile.type 
+  }
 
 
- // Get storage location and add to new file location before sending to firebase.
-// ref ask the storage and location for the file to put it in a readable format for the upload.
-let store= ref(storage,"images/"+names+"/Oringal");
-let storeCopy=ref(storage,"images/"+names+"/Copy");;
-
-
-  // Send to firebase by entering location of the file and name ,what inside the file and the file type.
-	let upload=uploadBytesResumable(store,imageFile,meta);
-  let Copyupload=uploadBytesResumable(storeCopy,imageFile,meta);
-
-
-  // Example of get file location
-	// ref(storage,"image/photo");
-
-
-    //Wait until its the url is ready.
-    for(var i=1000 ;i<=0;i--)
-    {
-
-      // Get store locactaion to url
- getDownloadURL(store).then(function(url){
-  getDownloadURL(storeCopy).then(function(url2){
-   
-
-  //
-
-
-   });}
-
-   );
-    }
-
-
-}
-  
 
  
 
-export default function Home() {
+
+
+// Get storage location and add to new file location before sending to firebase.
+// ref ask the storage and location for the file to put it in a readable format that helps with upload.
+// Example of get file location
+// ref(storage,"image/photo");
+
+let storeCopy= await ref(storage,"images/"+names+"/Copy");
+let store= await ref(storage,"images/"+names+"/Original");
+
+
+// Send to firebase by entering location of the file and name ,what inside the file and the file type.
+let upload=await uploadBytesResumable(store,imageFile,meta);
+let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
+   
+
+    
+    // Store url of firebase location using store ref
+    await getDownloadURL(store).then(function(url){
+       
+      tempUrl = url;
+      setImage(url);
+
+      });
+
+   
+  
+  
+    
+
+   await getDownloadURL(storeCopy).then(function(url2){
+        setImage2(url2);
+       
+   // setImage();
+
+  });
+ 
+
+
+
+ 
+}
+  //Change elements and call up load on click
+  function Clicking(){
+    
+       if(imageFile!=null && names!="")
+        {
+          
+          Upload();
+          setErrorhide(true);
+          setHidden(true);
+          //Example of image being used
+       //   setImage("/check.png");
+
+        }
+        else
+        {
+          setErrorhide(false);
+          setHidden(false);
+          setError("Error: User has not selected a file or not input user name")
+     
+        }
+        
+    }
+    
+    
+  
+  
+ 
+  
+  
+
+    
+
+
+
   return (
     <>
       <Head>
@@ -126,13 +198,28 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div>
-          <p>Backlog Item 1 Space</p>
-          <input type='text' onChange={(text)=>Getname(text.target.value)}></input>
-          <input type='file'  accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
-          <button  id="btn"  onClick={Clicking}>Upload</button>
+           <h1 hidden={!hide}>Images is now uploaded</h1>
+          <p color='red' hidden={errorhide}>{error} </p>
+          {/* <Image
+          hidden={!hide}
+          // Image area is stored here but can't get from url from other places
+      src={imageUrl}
+      alt=""
+      width={500}
+      height={500}
+    /> */}
+          
+          <p hidden={hide}>Backlog Item 1 Space</p>
+          <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
+          <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
+          <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
+          
         </div>
+        <img src={imageUrl} height={500} width={500} hidden={!hide}/>
+        
         <div>
-          <p>Backlog Item 3 Space</p>
+          <p hidden={hide}>Backlog Item 3 Space</p>
+          <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         </div>
       </main>
     </>
