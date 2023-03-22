@@ -2,6 +2,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
+import ColorList from '../components/color-list'
+import { Color } from '../components/color'
 import { initializeApp } from "firebase/app";
 import {getStorage, ref ,uploadBytesResumable,getDownloadURL, getBytes} from 'firebase/storage'
 import "firebase/firestore"
@@ -11,10 +13,6 @@ import { useState } from 'react';
 import { getURL } from 'next/dist/shared/lib/utils';
 import { start } from 'repl';
 const inter = Inter({ subsets: ['latin'] })
-
-
-
-
 
 
 // Get the Config to the firebase for connection
@@ -49,7 +47,36 @@ const db = getFirestore();
 let tempUrl ="";
  
 
-export default function Home() {
+export default function Home({ color }:{color:Color}) {
+  var localColor: Color;
+  localColor = new Color('red', '255', '0', '0');
+  var localColor2: Color;
+  localColor2 = new Color('green', '0', '255', '0');
+  var localColor3: Color;
+  localColor3 = new Color('blue', '0', '0', '255');
+
+  //Some colors from the actual palette:
+  var custom41: Color;
+  custom41 = new Color('custom 41', '114', '133', '151');
+  var custom11: Color;
+  custom11 = new Color('custom 11', '107', '81', '28');
+  var custom1: Color;
+  custom1 = new Color('custom 1', '11', '33', '26');
+  var custom7: Color;
+  custom7 = new Color('custom 7', '64', '220', '236');
+
+  var colors: Color[] = [];
+  colors.push(localColor);
+  colors.push(localColor2);
+  colors.push(localColor3);
+
+
+  //Pushing colors from actual palette:
+  colors.push(custom41);
+  colors.push(custom11);
+  colors.push(custom1);
+  colors.push(custom7);
+
  var names="";
 var urlstore="";
 var urlstore2;
@@ -176,17 +203,6 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
         }
         
     }
-    
-    
-  
-  
- 
-  
-  
-
-    
-
-
 
   return (
     <>
@@ -218,10 +234,27 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
         <img src={imageUrl} height={500} width={500} hidden={!hide}/>
         
         <div>
-          <p hidden={!hide}>Backlog Item 3 Space</p>
+          <p>Backlog Item 3 Space</p>
+          <ColorList colorList={colors}></ColorList>
           <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         </div>
       </main>
     </>
   )
+}
+
+export async function getStaticProps() {
+  //Color URL
+  // const response = await fetch('')
+  // const data = await response.json()
+  // console.log(data)
+  // var color: Color;
+  // color = new Color('tesingColor');
+
+  return{
+    props: {
+      // users: data,
+      // color: color
+    },
+  }
 }
