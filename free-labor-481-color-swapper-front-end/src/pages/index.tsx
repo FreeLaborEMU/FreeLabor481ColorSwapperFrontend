@@ -232,11 +232,11 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
           
         </div>
         <img src={imageUrl} height={500} width={500} hidden={!hide}/>
+        <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         
         <div>
           <p>Backlog Item 3 Space</p>
           <ColorList colorList={colors}></ColorList>
-          <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         </div>
       </main>
     </>
