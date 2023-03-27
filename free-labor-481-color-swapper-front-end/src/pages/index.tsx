@@ -109,7 +109,6 @@ var starturl="gs://colorswapper-f6b50.appspot.com/images/";
 
  
 // Check for any changes in src
-var names: any;
 function Getname(e: any){
 
  names=e;
@@ -122,12 +121,11 @@ function Getfile(images: any) {
 }
 
 // Send file to the firebase on button click
-function Clicking() {
+async function Upload() {
   // Get type from image file
   const meta = {
     contentType: imageFile.type
   }
-
   
 
 // Get storage location and add to new file location before sending to firebase.
