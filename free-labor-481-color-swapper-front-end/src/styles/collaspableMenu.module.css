@@ -1,0 +1,36 @@
+.closed {
+    background-color: cadetblue;
+    width: 250px;
+    position:fixed;
+    right: 1185px;
+    top: 0px;
+    height: 0 vh;
+    transition: height 0.8s ease-in
+    
+  }
+
+  .open {
+     height: 150vh;
+     width: 250px;
+     position:fixed;
+     top: 0px;
+    right:  1185px;
+     transition: height 0.8s ease-in;
+     background-color: cadetblue;
+  }
+  .content {
+    width: 250px;
+    position:absolute;
+    bottom: 700px;
+    right: 1080px;
+  
+  }
+  .textOpen {
+    visibility: visible;
+    background-color: cadetblue;
+  }
+  .textClosed {
+    visibility: hidden;
+    height: 0 vh;
+    background-color: none;
+  }

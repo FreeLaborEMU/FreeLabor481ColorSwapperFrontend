@@ -1,14 +1,15 @@
-
-var holder = document.getElementById("collapsible");
-holder.addEventListener("click", function() {
-    this.classList.toggle("active");
-    var colors = this.nextElementSibling();
-    if(content.style.display = "block")
-    {
-        content.style.display = "none";
+import styles2 from '@/styles/collaspableMenu.module.css'
+import { useState } from 'react';
+export default function collaspable()
+{
+    const[collasbled, uncollasbled] = useState(true);
+        const makeCollaspe= () => {
+    uncollasbled(!collasbled);
     }
-    else
-    {
-        content.style.display = "block";
-    }
-});
+    return (
+        <div className={collasbled?styles2.closed:styles2.open}>
+        <button className={styles2.content} id="collapsible" onClick={makeCollaspe}> Colors </button>
+        </div>
+    )
+    
+}

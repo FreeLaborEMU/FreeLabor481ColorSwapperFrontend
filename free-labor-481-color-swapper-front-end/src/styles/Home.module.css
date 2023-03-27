@@ -276,19 +276,4 @@
     transform: rotate(0deg);
   }
 }
-.collapsible {
-  background-color: white;
-  width: 25%;
-  position:absolute;
-  right: 1080px;
-  bottom: 700px;
-}
-.content {
-  width: 25%;
-  display: none;
-  overflow: hidden;
-  position:absolute;
-  bottom: 700px;
-  right: 1080px;
 
-}
