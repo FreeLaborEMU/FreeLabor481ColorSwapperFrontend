@@ -1,12 +1,20 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
+import styles2 from '@/styles/collaspableMenu.module.css'
+import Script from 'next/script'
+//mport collaspe from  ".scripts/listCollasper";
+//import collaspable from '.scripts/collaspable';
+import Holder from './holder';
 import ColorList from '../components/color-list'
 import { Color } from '../components/color'
 import { initializeApp } from "firebase/app";
-import {getStorage, ref ,uploadBytesResumable,getDownloadURL, getBytes} from 'firebase/storage'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, getBytes } from 'firebase/storage'
 import "firebase/firestore"
+// Store image file inside
+var imageFile: any;
 import { doc, setDoc , getFirestore, documentId} from "firebase/firestore"; 
 import { env, setUncaughtExceptionCaptureCallback } from 'process';
 import { useState } from 'react';
@@ -14,33 +22,22 @@ import { getURL } from 'next/dist/shared/lib/utils';
 import { start } from 'repl';
 const inter = Inter({ subsets: ['latin'] })
 
-
 // Get the Config to the firebase for connection
 
 const firebaseConfig = {
-
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-
-  storageBucket:  process.env. NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
-
 };
 
 // Intialize the firebase
 const app = initializeApp(firebaseConfig);
-
 // Get the storgae location in firbase
-const storage =getStorage();
-
+const storage = getStorage();
 const db = getFirestore();
   
 //let tempUrl = "https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/images%2Ftemp2%2FOriginal?alt=media&token=6fbc9e9e-3a94-4f2e-ac05-2ca59c6b5b84height={500} width={500";
@@ -111,35 +108,27 @@ var starturl="gs://colorswapper-f6b50.appspot.com/images/";
 
 
  
-
+// Check for any changes in src
+var names: any;
 function Getname(e: any){
 
  names=e;
-
 }
 
 // Get image file from file input
-function Getfile(images:any){
+function Getfile(images: any) {
   // input store files into a array and is at first place of the array
-  imageFile=images[0];
-
+  imageFile = images[0];
 }
 
-
-// Send file to the firebase 
- async function Upload(){
-  
-// Get type from image file
-const meta={
-  
-  contentType: imageFile.type 
+// Send file to the firebase on button click
+function Clicking() {
+  // Get type from image file
+  const meta = {
+    contentType: imageFile.type
   }
 
-
-
- 
-
-
+  
 
 // Get storage location and add to new file location before sending to firebase.
 // ref ask the storage and location for the file to put it in a readable format that helps with upload.
@@ -257,4 +246,4 @@ export async function getStaticProps() {
       // color: color
     },
   }
-}
+ }
