@@ -225,6 +225,10 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
           <p>Backlog Item 3 Space</p>
           <ColorList colorList={colors}></ColorList>
         </div>
+        <div>
+          <Holder/>
+        </div>
+
       </main>
     </>
   )
