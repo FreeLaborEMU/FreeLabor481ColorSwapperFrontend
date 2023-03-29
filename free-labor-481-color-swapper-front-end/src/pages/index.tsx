@@ -45,7 +45,7 @@ let tempUrl ="";
  
 
 // export default function Home({ color }:{color:Color}) {
-export default function Home({ colorsFromAPI }:{colorsFromAPI:string[]}) {
+export default function Home({ colorsFromAPIConverted, colorsFromAPIOriginal }:{colorsFromAPIConverted:string[], colorsFromAPIOriginal:string[]}) {
 
  var names="";
 var urlstore="";
@@ -181,8 +181,14 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
         <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         
         <div>
-          <p>Backlog Item 3 Space</p>
-          <ColorList colorList={colorsFromAPI}></ColorList>
+          <div style={{float: 'left'}}>
+            <h2>Original Image Colors</h2>
+            <ColorList colorList={colorsFromAPIOriginal}></ColorList>
+          </div>
+          <div style={{float: 'left'}}>
+            <h2>Converted Image Colors</h2>
+            <ColorList colorList={colorsFromAPIConverted}></ColorList>
+          </div>
         </div>
         <div>
           <Holder/>
@@ -211,10 +217,12 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
 
  export async function getServerSideProps(context:any) {
   const res = await fetch('http://localhost:8080/colorConversion/convertedImageColors');
-  const colorsFromAPI = await res.json();
-  console.log("yeah it's me");
-  console.log(colorsFromAPI);
+  const colorsFromAPIConverted = await res.json();
+  const res2 = await fetch('http://localhost:8080/colorConversion/originalImageColors');
+  const colorsFromAPIOriginal = await res2.json();
+  // console.log("yeah it's me");
+  // console.log(colorsFromAPI);
   return {
-    props: { colorsFromAPI }, // will be passed to the page component as props
+    props: { colorsFromAPIConverted, colorsFromAPIOriginal }, // will be passed to the page component as props
   }
 }
