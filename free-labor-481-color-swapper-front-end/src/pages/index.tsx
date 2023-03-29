@@ -44,35 +44,8 @@ const db = getFirestore();
 let tempUrl ="";
  
 
-export default function Home({ color }:{color:Color}) {
-  var localColor: Color;
-  localColor = new Color('red', '255', '0', '0');
-  var localColor2: Color;
-  localColor2 = new Color('green', '0', '255', '0');
-  var localColor3: Color;
-  localColor3 = new Color('blue', '0', '0', '255');
-
-  //Some colors from the actual palette:
-  var custom41: Color;
-  custom41 = new Color('custom 41', '114', '133', '151');
-  var custom11: Color;
-  custom11 = new Color('custom 11', '107', '81', '28');
-  var custom1: Color;
-  custom1 = new Color('custom 1', '11', '33', '26');
-  var custom7: Color;
-  custom7 = new Color('custom 7', '64', '220', '236');
-
-  var colors: Color[] = [];
-  colors.push(localColor);
-  colors.push(localColor2);
-  colors.push(localColor3);
-
-
-  //Pushing colors from actual palette:
-  colors.push(custom41);
-  colors.push(custom11);
-  colors.push(custom1);
-  colors.push(custom7);
+// export default function Home({ color }:{color:Color}) {
+export default function Home({ colorsFromAPI }:{colorsFromAPI:string[]}) {
 
  var names="";
 var urlstore="";
@@ -80,11 +53,6 @@ var urlstore2;
 
 // Store image file inside
 var imageFile: any;
-
-
-
-
-
 
 // Starting image
 var starturl="gs://colorswapper-f6b50.appspot.com/images/";
@@ -151,21 +119,12 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
 
       });
 
-   
-  
-  
-    
-
    await getDownloadURL(storeCopy).then(function(url2){
         setImage2(url2);
        
    // setImage();
 
   });
- 
-
-
-
  
 }
   //Change elements and call up load on click
@@ -223,7 +182,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
         
         <div>
           <p>Backlog Item 3 Space</p>
-          <ColorList colorList={colors}></ColorList>
+          <ColorList colorList={colorsFromAPI}></ColorList>
         </div>
         <div>
           <Holder/>
@@ -234,18 +193,28 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
   )
 }
 
-export async function getStaticProps() {
-  //Color URL
-  // const response = await fetch('')
-  // const data = await response.json()
-  // console.log(data)
-  // var color: Color;
-  // color = new Color('tesingColor');
+// export async function getStaticProps() {
+//   //Color URL
+//   // const response = await fetch('')
+//   // const data = await response.json()
+//   // console.log(data)
+//   // var color: Color;
+//   // color = new Color('tesingColor');
 
-  return{
-    props: {
-      // users: data,
-      // color: color
-    },
+//   return{
+//     props: {
+//       // users: data,
+//       // color: color
+//     },
+//   }
+//  }
+
+ export async function getServerSideProps(context:any) {
+  const res = await fetch('http://localhost:8080/colorConversion/convertedImageColors');
+  const colorsFromAPI = await res.json();
+  console.log("yeah it's me");
+  console.log(colorsFromAPI);
+  return {
+    props: { colorsFromAPI }, // will be passed to the page component as props
   }
- }
+}
