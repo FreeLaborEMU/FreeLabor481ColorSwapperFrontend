@@ -43,7 +43,6 @@ const db = getFirestore();
 //let tempUrl = "https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/images%2Ftemp2%2FOriginal?alt=media&token=6fbc9e9e-3a94-4f2e-ac05-2ca59c6b5b84height={500} width={500";
 let tempUrl ="";
  
-
 // export default function Home({ color }:{color:Color}) {
 export default function Home({ colorsFromAPIConverted, colorsFromAPIOriginal }:{colorsFromAPIConverted:string[], colorsFromAPIOriginal:string[]}) {
 
@@ -56,7 +55,6 @@ var imageFile: any;
 
 // Starting image
 var starturl="gs://colorswapper-f6b50.appspot.com/images/";
-
 
 // useState are sets of values and array that can change onloading and change elements
 
@@ -74,11 +72,8 @@ var starturl="gs://colorswapper-f6b50.appspot.com/images/";
   const [imageUrl2,setImage2]=useState(starturl);
   // Start value for user name
 
-
- 
 // Check for any changes in src
 function Getname(e: any){
-
  names=e;
 }
 
@@ -95,7 +90,6 @@ async function Upload() {
     contentType: imageFile.type
   }
   
-
 // Get storage location and add to new file location before sending to firebase.
 // ref ask the storage and location for the file to put it in a readable format that helps with upload.
 // Example of get file location
@@ -104,52 +98,33 @@ async function Upload() {
 let storeCopy=  ref(storage,"images/"+names+"/Copy");
 let store=  ref(storage,"images/"+names+"/Original");
 
-
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 let upload=await uploadBytesResumable(store,imageFile,meta);
 let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
-   
-
-    
     // Store url of firebase location using store ref
     await getDownloadURL(store).then(function(url){
-       
       tempUrl = url;
       setImage(url);
-
       });
-
    await getDownloadURL(storeCopy).then(function(url2){
-        setImage2(url2);
-       
-   // setImage();
-
+        setImage2(url2);       
   });
- 
 }
   //Change elements and call up load on click
   function Clicking(){
-    
        if(imageFile!=null && names!="")
-        {
-          
+        {  
           Upload();
           setErrorhide(true);
           setHidden(true);
-          //Example of image being used
-       //   setImage("/check.png");
-
         }
         else
         {
           setErrorhide(false);
           setHidden(false);
           setError("Error: User has not selected a file or not input user name")
-     
-        }
-        
+        }   
     }
-
   return (
     <>
       <Head>
@@ -162,15 +137,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
         <div>
            <h1 hidden={!hide}>Images is now uploaded</h1>
           <p color='red' hidden={errorhide}>{error} </p>
-          {/* <Image
-          hidden={!hide}
-          // Image area is stored here but can't get from url from other places
-      src={imageUrl}
-      alt=""
-      width={500}
-      height={500}
-    /> */}
-           <p hidden={hide}>Input User name and file to Convert</p>
+          <p hidden={hide}>Input User name and file to Convert</p>
           <p hidden={!hide}>Backlog Item 1 Space</p>
           <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
           <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
@@ -199,29 +166,12 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
   )
 }
 
-// export async function getStaticProps() {
-//   //Color URL
-//   // const response = await fetch('')
-//   // const data = await response.json()
-//   // console.log(data)
-//   // var color: Color;
-//   // color = new Color('tesingColor');
-
-//   return{
-//     props: {
-//       // users: data,
-//       // color: color
-//     },
-//   }
-//  }
-
  export async function getServerSideProps(context:any) {
   const res = await fetch('http://localhost:8080/colorConversion/convertedImageColors');
   const colorsFromAPIConverted = await res.json();
   const res2 = await fetch('http://localhost:8080/colorConversion/originalImageColors');
   const colorsFromAPIOriginal = await res2.json();
-  // console.log("yeah it's me");
-  // console.log(colorsFromAPI);
+
   return {
     props: { colorsFromAPIConverted, colorsFromAPIOriginal }, // will be passed to the page component as props
   }
