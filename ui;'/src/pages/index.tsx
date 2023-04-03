@@ -46,34 +46,6 @@ let tempUrl ="";
  
 
 export default function Home({ color }:{color:Color}) {
-  var localColor: Color;
-  localColor = new Color('red', '255', '0', '0');
-  var localColor2: Color;
-  localColor2 = new Color('green', '0', '255', '0');
-  var localColor3: Color;
-  localColor3 = new Color('blue', '0', '0', '255');
-
-  //Some colors from the actual palette:
-  var custom41: Color;
-  custom41 = new Color('custom 41', '114', '133', '151');
-  var custom11: Color;
-  custom11 = new Color('custom 11', '107', '81', '28');
-  var custom1: Color;
-  custom1 = new Color('custom 1', '11', '33', '26');
-  var custom7: Color;
-  custom7 = new Color('custom 7', '64', '220', '236');
-
-  var colors: Color[] = [];
-  colors.push(localColor);
-  colors.push(localColor2);
-  colors.push(localColor3);
-
-
-  //Pushing colors from actual palette:
-  colors.push(custom41);
-  colors.push(custom11);
-  colors.push(custom1);
-  colors.push(custom7);
 
  var names="";
 var urlstore="";
@@ -203,7 +175,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
       </Head>
       <main className={styles.main}>
         <div>
-           <h1 hidden={!hide}>Images is now uploaded</h1>
+           <h1 hidden={!hide} className={styles.other}>Images is now uploaded</h1>
           <p color='red' hidden={errorhide}>{error} </p>
           {/* <Image
           hidden={!hide}
@@ -220,13 +192,12 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
           
         </div>
+        <p>
         <img src={imageUrl} height={500} width={500} hidden={!hide}/>
         <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
+        </p>
+       
         
-        <div>
-          <p>Backlog Item 3 Space</p>
-          <ColorList colorList={colors}></ColorList>
-        </div>
         <div>
           <Holder/>
         </div>
