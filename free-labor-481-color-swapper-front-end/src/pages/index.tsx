@@ -1,10 +1,20 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
+import styles2 from '@/styles/collaspableMenu.module.css'
+import Script from 'next/script'
+//mport collaspe from  ".scripts/listCollasper";
+//import collaspable from '.scripts/collaspable';
+import Holder from './holder';
+import ColorList from '../components/color-list'
+import { Color } from '../components/color'
 import { initializeApp } from "firebase/app";
-import {getStorage, ref ,uploadBytesResumable,getDownloadURL, getBytes} from 'firebase/storage'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, getBytes } from 'firebase/storage'
 import "firebase/firestore"
+// Store image file inside
+var imageFile: any;
 import { doc, setDoc , getFirestore, documentId} from "firebase/firestore"; 
 import { env, setUncaughtExceptionCaptureCallback } from 'process';
 import { useState } from 'react';
@@ -12,44 +22,58 @@ import { getURL } from 'next/dist/shared/lib/utils';
 import { start } from 'repl';
 const inter = Inter({ subsets: ['latin'] })
 
-
-
-
-
-
 // Get the Config to the firebase for connection
 
 const firebaseConfig = {
-
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-
-  storageBucket:  process.env. NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
-
 };
 
 // Intialize the firebase
 const app = initializeApp(firebaseConfig);
-
 // Get the storgae location in firbase
-const storage =getStorage();
-
+const storage = getStorage();
 const db = getFirestore();
   
 //let tempUrl = "https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/images%2Ftemp2%2FOriginal?alt=media&token=6fbc9e9e-3a94-4f2e-ac05-2ca59c6b5b84height={500} width={500";
 let tempUrl ="";
  
+//mdk
+export default function Home({ color }:{color:Color}) {
+  var localColor: Color;
+  localColor = new Color('red', '255', '0', '0');
+  var localColor2: Color;
+  localColor2 = new Color('green', '0', '255', '0');
+  var localColor3: Color;
+  localColor3 = new Color('blue', '0', '0', '255');
 
-export default function Home() {
+  //Some colors from the actual palette:
+  var custom41: Color;
+  custom41 = new Color('custom 41', '114', '133', '151');
+  var custom11: Color;
+  custom11 = new Color('custom 11', '107', '81', '28');
+  var custom1: Color;
+  custom1 = new Color('custom 1', '11', '33', '26');
+  var custom7: Color;
+  custom7 = new Color('custom 7', '64', '220', '236');
+
+  var colors: Color[] = [];
+  colors.push(localColor);
+  colors.push(localColor2);
+  colors.push(localColor3);
+
+
+  //Pushing colors from actual palette:
+  colors.push(custom41);
+  colors.push(custom11);
+  colors.push(custom1);
+  colors.push(custom7);
+
  var names="";
 var urlstore="";
 var urlstore2;
@@ -84,35 +108,25 @@ var starturl="gs://colorswapper-f6b50.appspot.com/images/";
 
 
  
-
+// Check for any changes in src
 function Getname(e: any){
 
  names=e;
-
 }
 
 // Get image file from file input
-function Getfile(images:any){
+function Getfile(images: any) {
   // input store files into a array and is at first place of the array
-  imageFile=images[0];
-
+  imageFile = images[0];
 }
 
-
-// Send file to the firebase 
- async function Upload(){
-  
-// Get type from image file
-const meta={
-  
-  contentType: imageFile.type 
+// Send file to the firebase on button click
+async function Upload() {
+  // Get type from image file
+  const meta = {
+    contentType: imageFile.type
   }
-
-
-
- 
-
-
+  
 
 // Get storage location and add to new file location before sending to firebase.
 // ref ask the storage and location for the file to put it in a readable format that helps with upload.
@@ -125,7 +139,7 @@ let store=  ref(storage,"images/"+names+"/Original");
 
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 let upload=await uploadBytesResumable(store,imageFile,meta);
-let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
+//let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
    
 
     
@@ -134,6 +148,16 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
        
       tempUrl = url;
       setImage(url);
+      
+		 setDoc(doc(db,'users',names),{
+        
+      orginal: url,
+      check: false,
+      username: names
+
+      
+
+    });
 
       });
 
@@ -176,17 +200,6 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
         }
         
     }
-    
-    
-  
-  
- 
-  
-  
-
-    
-
-
 
   return (
     <>
@@ -216,12 +229,33 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
           
         </div>
         <img src={imageUrl} height={500} width={500} hidden={!hide}/>
+        <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         
         <div>
-          <p hidden={!hide}>Backlog Item 3 Space</p>
-          <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
+          <p>Backlog Item 3 Space</p>
+          <ColorList colorList={colors}></ColorList>
         </div>
+        <div>
+          <Holder/>
+        </div>
+
       </main>
     </>
   )
 }
+
+export async function getStaticProps() {
+  //Color URL
+  // const response = await fetch('')
+  // const data = await response.json()
+  // console.log(data)
+  // var color: Color;
+  // color = new Color('tesingColor');
+
+  return{
+    props: {
+      // users: data,
+      // color: color
+    },
+  }
+ }

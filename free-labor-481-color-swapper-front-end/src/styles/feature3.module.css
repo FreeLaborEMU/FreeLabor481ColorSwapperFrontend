@@ -1,0 +1,15 @@
+.box {
+    height: 15px;
+    width: 15px;
+    background-color: #555;
+    border: .1rem solid;
+    border-color: white;
+}
+.colorList {
+    color: white;
+    list-style: square;
+}
+.colorListItem {
+    display: flex;
+    position: relative; 
+}
