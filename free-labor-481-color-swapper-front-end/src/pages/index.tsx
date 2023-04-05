@@ -139,7 +139,7 @@ let store=  ref(storage,"images/"+names+"/Original");
 
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 let upload=await uploadBytesResumable(store,imageFile,meta);
-let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
+//let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
    
 
     
@@ -148,8 +148,19 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
        
       tempUrl = url;
       setImage(url);
+      
+		 setDoc(doc(db,'users',names),{
+        
+      orginal: url,
+      check: false,
+      username: names
+
+      
+
+    });
 
       });
+
 
    
   
