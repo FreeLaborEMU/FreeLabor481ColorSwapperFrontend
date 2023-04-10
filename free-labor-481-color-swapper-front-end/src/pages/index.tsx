@@ -84,7 +84,7 @@ var urlstore2;
 // Store image file inside
 var imageFile: any;
 
-
+var indexFile: any;
 
 
 
@@ -125,6 +125,10 @@ function Getfile(images:any){
 
 }
 
+function getMulti(index:any){
+  indexFile=index[0];
+}
+
 
 // Send file to the firebase 
  async function Upload(){
@@ -135,7 +139,9 @@ const meta={
   contentType: imageFile.type 
   }
 
-
+const meta2={
+  contextType: indexFile.type
+}
 
  
 
@@ -149,10 +155,14 @@ const meta={
 let storeCopy=  ref(storage,"images/"+names+"/Copy");
 let store=  ref(storage,"images/"+names+"/Original");
 
+let storeFile= ref(storage,"files/"+names);
+
 
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 let upload=await uploadBytesResumable(store,imageFile,meta);
 let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
+
+let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
    
 
     
@@ -184,14 +194,15 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
   //Change elements and call up load on click
   function Clicking(){
     
-       if(imageFile!=null && names!="")
+       if(imageFile!=null && names!="" && indexFile!=null)  //chnagedad
         {
+          
           
           Upload();
           setErrorhide(true);
           setHidden(true);
           //Example of image being used
-       //   setImage("/check.png");
+        //   setImage("/check.png");
 
         }
         else
@@ -228,6 +239,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
           <p hidden={!hide}>Backlog Item 1 Space</p>
           <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
           <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
+          <input type='file' hidden={hide} accept='dat' onChange={(index)=>getMulti(index.target.files)}></input>
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
           
         </div>
@@ -236,6 +248,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
         
         <div>
           <p>Backlog Item 3 Space</p>
+          
           <ColorList colorList={colors}></ColorList>
         </div>
       </main>
