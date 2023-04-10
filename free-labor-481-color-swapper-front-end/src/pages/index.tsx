@@ -81,7 +81,7 @@ var urlstore2;
 // Store image file inside
 var imageFile: any;
 
-
+var indexFile: any;
 
 
 
@@ -120,6 +120,29 @@ function Getfile(images: any) {
   imageFile = images[0];
 }
 
+
+function getMulti(index:any){
+  indexFile=index[0];
+}
+
+
+// Send file to the firebase 
+ async function Upload(){
+  
+// Get type from image file
+const meta={
+  
+  contentType: imageFile.type 
+  }
+
+const meta2={
+  contextType: indexFile.type
+}
+
+ 
+
+
+
 // Send file to the firebase on button click
 async function Upload() {
   // Get type from image file
@@ -127,6 +150,7 @@ async function Upload() {
     contentType: imageFile.type
   }
   
+
 
 // Get storage location and add to new file location before sending to firebase.
 // ref ask the storage and location for the file to put it in a readable format that helps with upload.
@@ -136,10 +160,16 @@ async function Upload() {
 let storeCopy=  ref(storage,"images/"+names+"/Copy");
 let store=  ref(storage,"images/"+names+"/Original");
 
+let storeFile= ref(storage,"files/"+names);
+
 
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 let upload=await uploadBytesResumable(store,imageFile,meta);
+
+let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
+
 //let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
+
    
 
     
@@ -182,14 +212,15 @@ let upload=await uploadBytesResumable(store,imageFile,meta);
   //Change elements and call up load on click
   function Clicking(){
     
-       if(imageFile!=null && names!="")
+       if(imageFile!=null && names!="" && indexFile!=null)  //chnagedad
         {
+          
           
           Upload();
           setErrorhide(true);
           setHidden(true);
           //Example of image being used
-       //   setImage("/check.png");
+        //   setImage("/check.png");
 
         }
         else
@@ -226,6 +257,7 @@ let upload=await uploadBytesResumable(store,imageFile,meta);
           <p hidden={!hide}>Backlog Item 1 Space</p>
           <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
           <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
+          <input type='file' hidden={hide} accept='dat' onChange={(index)=>getMulti(index.target.files)}></input>
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
           
         </div>
@@ -234,6 +266,7 @@ let upload=await uploadBytesResumable(store,imageFile,meta);
         
         <div>
           <p>Backlog Item 3 Space</p>
+          
           <ColorList colorList={colors}></ColorList>
         </div>
         <div>
