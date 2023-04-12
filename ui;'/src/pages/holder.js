@@ -44,7 +44,7 @@ function Holder()
         }
         return (
             <div className={collasbled?styles2.closed:styles2.open}>
-            <button className={styles2.collaspsible} id="collapsible" onClick={makeCollaspe}> Colors </button>
+            <p className={styles2.button}> <button className={styles2.collaspsible} id="collapsible" onClick={makeCollaspe}> Colors </button></p> 
             <div className={collasbled?styles2.textClosed:styles2.testOpen}>
                 <ColorList colorList={colors}></ColorList>
             </div> 

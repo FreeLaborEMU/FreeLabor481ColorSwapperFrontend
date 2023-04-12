@@ -1,5 +1,5 @@
 .closed {
-    background-color: cadetblue;
+    background-color: white;
     width: 250px;
     position:fixed;
     right: 1191px;
@@ -33,4 +33,7 @@
     visibility: hidden;
     height: 0 vh;
     background-color: none;
+  }
+  .button{
+    background-color: cadetblue;
   }

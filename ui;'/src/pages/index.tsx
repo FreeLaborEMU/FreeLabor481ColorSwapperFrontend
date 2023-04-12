@@ -22,7 +22,7 @@ import { useState } from 'react';
 import { getURL } from 'next/dist/shared/lib/utils';
 import { start } from 'repl';
 const inter = Inter({ subsets: ['latin'] })
-
+// picture ratio, margin, merge to main
 // Get the Config to the firebase for connection
 
 const firebaseConfig = {
@@ -175,7 +175,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
       </Head>
       <main className={styles.main}>
         <div>
-           <h1 hidden={!hide} className={styles.other}>Images is now uploaded</h1>
+           <h1 hidden={!hide} className={styles3.other}>Images is now uploaded</h1>
           <p color='red' hidden={errorhide}>{error} </p>
           {/* <Image
           hidden={!hide}
