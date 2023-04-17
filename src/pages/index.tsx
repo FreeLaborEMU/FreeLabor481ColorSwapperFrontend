@@ -55,7 +55,7 @@ var urlstore2;
 // Store image file inside
 var imageFile: any;
 
-
+var indexFile: any;
 
 
 
@@ -94,11 +94,19 @@ function Getfile(images: any) {
   imageFile = images[0];
 }
 
+function getMulti(index:any){
+  indexFile=index[0];
+}
+
 // Send file to the firebase on button click
 async function Upload() {
   // Get type from image file
   const meta = {
     contentType: imageFile.type
+  }
+
+  const meta2={
+    contextType: indexFile.type
   }
   
 
@@ -110,12 +118,14 @@ async function Upload() {
 let storeCopy=  ref(storage,"images/"+names+"/Copy");
 let store=  ref(storage,"images/"+names+"/Original");
 
+let storeFile= ref(storage,"files/"+names);
+
 
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 let upload=await uploadBytesResumable(store,imageFile,meta);
 let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
    
-
+let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
     
     // Store url of firebase location using store ref
     await getDownloadURL(store).then(function(url){
@@ -145,7 +155,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
   //Change elements and call up load on click
   function Clicking(){
     
-       if(imageFile!=null && names!="")
+       if(imageFile!=null && names!="" && indexFile!=null)
         {
           
           Upload();
@@ -190,6 +200,7 @@ let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
           <p hidden={!hide}>Backlog Item 1 Space</p>
           <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
           <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
+          <input type='file' hidden={hide} accept='dat' onChange={(index)=>getMulti(index.target.files)}></input>
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
           
         </div>
