@@ -1,51 +1,228 @@
+
 import Head from 'next/head'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
-
+import styles2 from '@/styles/collaspableMenu.module.css'
+import styles3 from '@/styles/layout.module.css'
+import Script from 'next/script'
+//mport collaspe from  ".scripts/listCollasper";
+//import collaspable from '.scripts/collaspable';
+import Holder from './holder';
+import ColorList from '../components/color-list'
+import { Color } from '../components/color'
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, getBytes } from 'firebase/storage'
+import "firebase/firestore"
+// Store image file inside
+var imageFile: any;
+import { doc, setDoc , getFirestore, documentId} from "firebase/firestore"; 
+import { env, setUncaughtExceptionCaptureCallback } from 'process';
+import { useState } from 'react';
+import { getURL } from 'next/dist/shared/lib/utils';
+import { start } from 'repl';
 const inter = Inter({ subsets: ['latin'] })
+// picture ratio, margin, merge to main
+// Get the Config to the firebase for connection
 
-function displayImage()
-{
-  let returnValue: any;
-  returnValue = document.getElementById("testPic")!.onchange = function(event) {getFile(event)};
-  var test = document.getElementById("textPic");
-  document.getElementById("picDisplayer")!.innerHTML = "<img src=\" " + document.getElementById("testPic") + "\">";
-  return returnValue;
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+};
+
+// Intialize the firebase
+const app = initializeApp(firebaseConfig);
+// Get the storgae location in firbase
+const storage = getStorage();
+const db = getFirestore();
+  
+//let tempUrl = "https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/images%2Ftemp2%2FOriginal?alt=media&token=6fbc9e9e-3a94-4f2e-ac05-2ca59c6b5b84height={500} width={500";
+let tempUrl ="";
+ 
+
+export default function Home({ color }:{color:Color}) {
+
+ var names="";
+var urlstore="";
+var urlstore2;
+
+// Store image file inside
+var imageFile: any;
+
+
+
+
+
+
+// Starting image
+var starturl="gs://colorswapper-f6b50.appspot.com/images/";
+
+
+// useState are sets of values and array that can change onloading and change elements
+
+// Hides error codes 
+  const [errorhide,setErrorhide]= useState(true);
+
+  //Hide elements after user upload correctly
+  const [hide,setHidden]= useState(false);
+  //Set error messages
+  const [error,setError]= useState("");
+
+  //Get changes for image src 
+  const [imageUrl,setImage]=useState(starturl);
+
+  const [imageUrl2,setImage2]=useState(starturl);
+  // Start value for user name
+
+
+ 
+// Check for any changes in src
+function Getname(e: any){
+
+ names=e;
 }
 
-function getFile(e:Event | null) {
-  if(e != null){
-    // @ts-ignore: Object is possibly 'null'.
-    let imageFile = (e.target as HTMLInputElement).files[0];
-    console.log(imageFile.name);
+// Get image file from file input
+function Getfile(images: any) {
+  // input store files into a array and is at first place of the array
+  imageFile = images[0];
+}
+
+// Send file to the firebase on button click
+async function Upload() {
+  // Get type from image file
+  const meta = {
+    contentType: imageFile.type
   }
-}
+  
 
-export default function Home() { 
+// Get storage location and add to new file location before sending to firebase.
+// ref ask the storage and location for the file to put it in a readable format that helps with upload.
+// Example of get file location
+// ref(storage,"image/photo");
+
+let storeCopy=  ref(storage,"images/"+names+"/Copy");
+let store=  ref(storage,"images/"+names+"/Original");
+
+
+// Send to firebase by entering location of the file and name ,what inside the file and the file type.
+let upload=await uploadBytesResumable(store,imageFile,meta);
+let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
+   
+
+    
+    // Store url of firebase location using store ref
+    await getDownloadURL(store).then(function(url){
+       
+      tempUrl = url;
+      setImage(url);
+
+      });
+
+   
+  
+  
+    
+
+   await getDownloadURL(storeCopy).then(function(url2){
+        setImage2(url2);
+       
+   // setImage();
+
+  });
+ 
+
+
+
+ 
+}
+  //Change elements and call up load on click
+  function Clicking(){
+    
+       if(imageFile!=null && names!="")
+        {
+          
+          Upload();
+          setErrorhide(true);
+          setHidden(true);
+          //Example of image being used
+       //   setImage("/check.png");
+
+        }
+        else
+        {
+          setErrorhide(false);
+          setHidden(false);
+          setError("Error: User has not selected a file or not input user name")
+     
+        }
+        
+    }
+
   return (
-    <main>
-      <head>
-        <title>481 Color Swapper</title>
+    <>
+      <Head>
+        <title id="lol">481 Color Swapper</title>
         <meta name="description" content="Generated by create next app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </head>
+        <h1 className={styles3.header}> Color Swapper </h1>
+      </Head>
       <main className={styles.main}>
         <div>
-          <input type="file" id="testPic" name="textPic" accept="image/*"></input>
-          <button onClick={displayImage}> Submit </button>
-          <p id="picDisplayer">  </p>
-        </div>
-        <div>
-          <p>Backlog Item 3 Space</p>
-        </div>
-        <div>
-
+           <h1 hidden={!hide} className={styles3.other}>Images is now uploaded</h1>
+          <p color='red' hidden={errorhide}>{error} </p>
+          {/* <Image
+          hidden={!hide}
+          // Image area is stored here but can't get from url from other places
+      src={imageUrl}
+      alt=""
+      width={500}
+      height={500}
+    /> */}
+           <p hidden={hide} className={styles3.other}>Input User name and file to Convert</p>
+          <p hidden={!hide}>Backlog Item 1 Space</p>
+          <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
+          <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
+          <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
           
         </div>
+        <p>
+        <img src={imageUrl} height={500} width={500} hidden={!hide}/>
+        <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
+        </p>
+       
+        
+        <div>
+          <Holder/>
+        </div>
+          
       </main>
-    
-  )
+      <footer className={styles3.footer}>
+            <p> This website is the creation of Free Labor. All rights reserverd and copyright 2023.</p>
+        </footer>
+    </>
   )
 }
+
+export async function getStaticProps() {
+  //Color URL
+  // const response = await fetch('')
+  // const data = await response.json()
+  // console.log(data)
+  // var color: Color;
+  // color = new Color('tesingColor');
+
+  return{
+    props: {
+      // users: data,
+      // color: color
+    },
+  }
+ }
