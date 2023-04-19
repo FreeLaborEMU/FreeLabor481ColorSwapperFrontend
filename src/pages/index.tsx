@@ -133,6 +133,21 @@ let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
        
       tempUrl = url;
       setImage(url);
+        // Store url of firebase location using store ref
+    await getDownloadURL(store).then(function(url){
+       
+      tempUrl = url;
+      setImage(url);
+      
+		 setDoc(doc(db,'users',names),{
+        
+      orginal: url,
+      check: false,
+      username: names
+
+      
+
+    });
 
       });
 
