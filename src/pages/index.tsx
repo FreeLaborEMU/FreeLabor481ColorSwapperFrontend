@@ -46,7 +46,7 @@ const db = getFirestore();
 let tempUrl ="";
  
 
-export default function Home({ color }:{color:Color}) {
+export default function Home({ colorsFromAPIConverted, colorsFromAPIOriginal }:{colorsFromAPIConverted:string[], colorsFromAPIOriginal:string[]}) {
 
  var names="";
 var urlstore="";
@@ -124,7 +124,8 @@ let storeFile= ref(storage,"files/"+names);
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
 let upload=await uploadBytesResumable(store,imageFile,meta);
 let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
-   
+
+//This line always throws a typing error, ignore
 let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
     
     // Store url of firebase location using store ref
@@ -208,7 +209,17 @@ let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
         <img src={imageUrl} height={500} width={500} hidden={!hide}/>
         <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         </p>
-       
+
+        <div>
+          <div style={{float: 'left'}}>
+            <h2>Original Image Colors</h2>
+            <ColorList colorList={colorsFromAPIOriginal}></ColorList>
+          </div>
+          <div style={{float: 'left'}}>
+            <h2>Converted Image Colors</h2>
+            <ColorList colorList={colorsFromAPIConverted}></ColorList>
+          </div>
+        </div>
         
         <div>
           <Holder/>
@@ -222,18 +233,13 @@ let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
   )
 }
 
-export async function getStaticProps() {
-  //Color URL
-  // const response = await fetch('')
-  // const data = await response.json()
-  // console.log(data)
-  // var color: Color;
-  // color = new Color('tesingColor');
+ export async function getServerSideProps(context:any) {
+  const res = await fetch('http://localhost:8080/colorConversion/convertedImageColors');
+  const colorsFromAPIConverted = await res.json();
+  const res2 = await fetch('http://localhost:8080/colorConversion/originalImageColors');
+  const colorsFromAPIOriginal = await res2.json();
 
-  return{
-    props: {
-      // users: data,
-      // color: color
-    },
+  return {
+    props: { colorsFromAPIConverted, colorsFromAPIOriginal }, // will be passed to the page component as props
   }
- }
+}
