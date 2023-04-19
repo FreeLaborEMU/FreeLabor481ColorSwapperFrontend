@@ -1,30 +1,15 @@
-
 import Head from 'next/head'
-import Image from 'next/image'
-import dynamic from 'next/dynamic'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
-import styles2 from '@/styles/collaspableMenu.module.css'
 import styles3 from '@/styles/layout.module.css'
-import Script from 'next/script'
-//mport collaspe from  ".scripts/listCollasper";
-//import collaspable from '.scripts/collaspable';
 import Holder from './holder';
 import ColorList from '../components/color-list'
-import { Color } from '../components/color'
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, getBytes } from 'firebase/storage'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import "firebase/firestore"
-// Store image file inside
-var imageFile: any;
-import { doc, setDoc , getFirestore, documentId} from "firebase/firestore"; 
-import { env, setUncaughtExceptionCaptureCallback } from 'process';
+import { doc, setDoc , getFirestore } from "firebase/firestore"; 
 import { useState } from 'react';
-import { getURL } from 'next/dist/shared/lib/utils';
-import { start } from 'repl';
 const inter = Inter({ subsets: ['latin'] })
-// picture ratio, margin, merge to main
-// Get the Config to the firebase for connection
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -42,23 +27,16 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage();
 const db = getFirestore();
   
-//let tempUrl = "https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/images%2Ftemp2%2FOriginal?alt=media&token=6fbc9e9e-3a94-4f2e-ac05-2ca59c6b5b84height={500} width={500";
 let tempUrl ="";
- 
 
 export default function Home({ colorsFromAPIConverted, colorsFromAPIOriginal }:{colorsFromAPIConverted:string[], colorsFromAPIOriginal:string[]}) {
 
- var names="";
-var urlstore="";
-var urlstore2;
+var names="";
 
 // Store image file inside
 var imageFile: any;
 
 var indexFile: any;
-
-
-
 
 // Starting image
 var starturl="gs://colorswapper-f6b50.appspot.com/images/";
@@ -67,21 +45,19 @@ var starturl="gs://colorswapper-f6b50.appspot.com/images/";
 // useState are sets of values and array that can change onloading and change elements
 
 // Hides error codes 
-  const [errorhide,setErrorhide]= useState(true);
+const [errorhide,setErrorhide]= useState(true);
 
-  //Hide elements after user upload correctly
-  const [hide,setHidden]= useState(false);
-  //Set error messages
-  const [error,setError]= useState("");
+//Hide elements after user upload correctly
+const [hide,setHidden]= useState(false);
+//Set error messages
+const [error,setError]= useState("");
 
-  //Get changes for image src 
-  const [imageUrl,setImage]=useState(starturl);
+//Get changes for image src 
+const [imageUrl,setImage]=useState(starturl);
 
-  const [imageUrl2,setImage2]=useState(starturl);
-  // Start value for user name
+const [imageUrl2,setImage2]=useState(starturl);
+// Start value for user name
 
-
- 
 // Check for any changes in src
 function Getname(e: any){
 
@@ -104,11 +80,9 @@ async function Upload() {
   const meta = {
     contentType: imageFile.type
   }
-
   const meta2={
     contextType: indexFile.type
   }
-  
 
 // Get storage location and add to new file location before sending to firebase.
 // ref ask the storage and location for the file to put it in a readable format that helps with upload.
@@ -117,80 +91,46 @@ async function Upload() {
 
 let storeCopy=  ref(storage,"images/"+names+"/Copy");
 let store=  ref(storage,"images/"+names+"/Original");
-
 let storeFile= ref(storage,"files/"+names);
 
-
 // Send to firebase by entering location of the file and name ,what inside the file and the file type.
-let upload=await uploadBytesResumable(store,imageFile,meta);
-let Copyupload=await uploadBytesResumable(storeCopy,imageFile,meta);
+let upload=await uploadBytesResumable(store, imageFile, meta);
+let Copyupload=await uploadBytesResumable(storeCopy, imageFile, meta);
 
 //This line always throws a typing error, ignore
-let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
-    
-    // Store url of firebase location using store ref
-    await getDownloadURL(store).then(function(url){
-       
-      tempUrl = url;
-      setImage(url);
-        // Store url of firebase location using store ref
-    await getDownloadURL(store).then(function(url){
-       
-      tempUrl = url;
-      setImage(url);
-      
-		 setDoc(doc(db,'users',names),{
-        
-      orginal: url,
-      check: false,
-      username: names
-
-      
-
+let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
+  // Store url of firebase location using store ref
+  await getDownloadURL(store).then(function(url){
+    tempUrl = url;
+    setImage(url);
+    setDoc(doc(db,'users',names),{
+    orginal: url,
+    check: false,
+    username: names
     });
-
-      });
-
-   
-  
-  
-    
-
-   await getDownloadURL(storeCopy).then(function(url2){
-        setImage2(url2);
-       
-   // setImage();
-
   });
- 
-
-
-
- 
-}
+  await getDownloadURL(storeCopy).then(function(url2){
+      setImage2(url2);
+    // setImage();
+    });
+  }
   //Change elements and call up load on click
   function Clicking(){
-    
-       if(imageFile!=null && names!="" && indexFile!=null)
-        {
-          
-          Upload();
-          setErrorhide(true);
-          setHidden(true);
-          //Example of image being used
-       //   setImage("/check.png");
-
-        }
-        else
-        {
-          setErrorhide(false);
-          setHidden(false);
-          setError("Error: User has not selected a file or not input user name")
-     
-        }
-        
+    if(imageFile!=null && names!="" && indexFile!=null)
+    { 
+      Upload();
+      setErrorhide(true);
+      setHidden(true);
+      //Example of image being used
+    //   setImage("/check.png");
     }
-
+    else
+    {
+      setErrorhide(false);
+      setHidden(false);
+      setError("Error: User has not selected a file or not input user name")
+    }  
+  }
   return (
     <>
       <Head>
@@ -202,27 +142,18 @@ let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
       </Head>
       <main className={styles.main}>
         <div>
-           <h1 hidden={!hide} className={styles3.other}>Images is now uploaded</h1>
+          <h1 hidden={!hide} className={styles3.other}>Images is now uploaded</h1>
           <p color='red' hidden={errorhide}>{error} </p>
-          {/* <Image
-          hidden={!hide}
-          // Image area is stored here but can't get from url from other places
-      src={imageUrl}
-      alt=""
-      width={500}
-      height={500}
-    /> */}
-           <p hidden={hide} className={styles3.other}>Input User name and file to Convert</p>
+          <p hidden={hide} className={styles3.other}>Input User name and file to Convert</p>
           <p hidden={!hide}>Backlog Item 1 Space</p>
           <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
           <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
           <input type='file' hidden={hide} accept='dat' onChange={(index)=>getMulti(index.target.files)}></input>
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
-          
         </div>
         <p>
-        <img src={imageUrl} height={500} width={500} hidden={!hide}/>
-        <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
+          <img src={imageUrl} height={500} width={500} hidden={!hide}/>
+          <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
         </p>
 
         <div>
@@ -235,11 +166,9 @@ let uploadFile=await uploadBytesResumable(storeFile,indexFile,meta2);
             <ColorList colorList={colorsFromAPIConverted}></ColorList>
           </div>
         </div>
-        
         <div>
           <Holder/>
         </div>
-          
       </main>
       <footer className={styles3.footer}>
             <p> This website is the creation of Free Labor. All rights reserverd and copyright 2023.</p>
