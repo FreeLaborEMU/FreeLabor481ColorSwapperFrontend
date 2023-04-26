@@ -44,7 +44,7 @@ export default function Home({ colorsFromAPIConverted, colorsFromAPIOriginal }:{
 let store=  ref(storage,"images/"+names+"/Original");
 
 
-let storeFile= ref(storage,"files/"+names);
+let storeFile= ref(storage,"files/dogo");
 
 // Store image file inside
 var imageFile: any;
@@ -131,7 +131,7 @@ async function Upload() {
     
   
   
-  
+
   
 
   //Change elements and call up load on click
