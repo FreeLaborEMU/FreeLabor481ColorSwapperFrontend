@@ -9,6 +9,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/
 import "firebase/firestore"
 import { doc, setDoc , getFirestore } from "firebase/firestore"; 
 import { useState } from 'react';
+import { log } from 'console';
 const inter = Inter({ subsets: ['latin'] })
 
 const firebaseConfig = {
@@ -26,12 +27,24 @@ const app = initializeApp(firebaseConfig);
 // Get the storgae location in firbase
 const storage = getStorage();
 const db = getFirestore();
-  
+ // Name of user 
 let tempUrl ="";
+var names="User";
+
+
+
 
 export default function Home({ colorsFromAPIConverted, colorsFromAPIOriginal }:{colorsFromAPIConverted:string[], colorsFromAPIOriginal:string[]}) {
+// Get storage location and add to new file location before sending to firebase.
+// ref ask the storage and location for the file to put it in a readable format that helps with upload.
+// Example of get file location
+// ref(storage,"image/photo");
 
-var names="";
+ let storeCopy=  ref(storage,"images/"+names+"/Copy");
+let store=  ref(storage,"images/"+names+"/Original");
+
+
+let storeFile= ref(storage,"files/"+names);
 
 // Store image file inside
 var imageFile: any;
@@ -49,6 +62,7 @@ const [errorhide,setErrorhide]= useState(true);
 
 //Hide elements after user upload correctly
 const [hide,setHidden]= useState(false);
+
 //Set error messages
 const [error,setError]= useState("");
 
@@ -56,6 +70,7 @@ const [error,setError]= useState("");
 const [imageUrl,setImage]=useState(starturl);
 
 const [imageUrl2,setImage2]=useState(starturl);
+
 // Start value for user name
 
 // Check for any changes in src
@@ -65,40 +80,34 @@ function Getname(e: any){
 }
 
 // Get image file from file input
-function Getfile(images: any) {
+async function Getfile(images: any) {
   // input store files into a array and is at first place of the array
   imageFile = images[0];
+   
+  // Get type from image file
+   const meta = {
+    contentType: imageFile.type
+  }
+
+// Send to firebase by entering location of the file and name ,what inside the file and the file type.
+  let upload=await uploadBytesResumable(store, imageFile, meta);
 }
 
-function getMulti(index:any){
+ async function getMulti(index:any){
   indexFile=index[0];
+  
+  const meta2={
+    contextType: indexFile.type
+  }
+ // Upload to firebase
+let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
+
 }
 
 // Send file to the firebase on button click
 async function Upload() {
-  // Get type from image file
-  const meta = {
-    contentType: imageFile.type
-  }
-  const meta2={
-    contextType: indexFile.type
-  }
 
-// Get storage location and add to new file location before sending to firebase.
-// ref ask the storage and location for the file to put it in a readable format that helps with upload.
-// Example of get file location
-// ref(storage,"image/photo");
-
-let storeCopy=  ref(storage,"images/"+names+"/Copy");
-let store=  ref(storage,"images/"+names+"/Original");
-let storeFile= ref(storage,"files/"+names);
-
-// Send to firebase by entering location of the file and name ,what inside the file and the file type.
-let upload=await uploadBytesResumable(store, imageFile, meta);
-let Copyupload=await uploadBytesResumable(storeCopy, imageFile, meta);
-
-//This line always throws a typing error, ignore
-let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
+  
   // Store url of firebase location using store ref
   await getDownloadURL(store).then(function(url){
     tempUrl = url;
@@ -111,11 +120,30 @@ let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
   });
   await getDownloadURL(storeCopy).then(function(url2){
       setImage2(url2);
-    // setImage();
+ 
     });
   }
+
+
+
+ 
+    
+    
+  
+  
+  
+  
+
   //Change elements and call up load on click
-  function Clicking(){
+  const Clicking= async () => {
+   
+    const response = await fetch('http://localhost:8080/main/convert', {
+    
+    mode:'no-cors'
+  
+
+    });
+
     if(imageFile!=null && names!="" && indexFile!=null)
     { 
       Upload();
@@ -131,6 +159,7 @@ let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
       setError("Error: User has not selected a file or not input user name")
     }  
   }
+
   return (
     <>
       <Head>
@@ -146,7 +175,6 @@ let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
           <p color='red' hidden={errorhide}>{error} </p>
           <p hidden={hide} className={styles3.other}>Input User name and file to Convert</p>
           <p hidden={!hide}>Backlog Item 1 Space</p>
-          <input type='text' hidden={hide} onChange={(text)=>Getname(text.target.value)}></input>
           <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
           <input type='file' hidden={hide} accept='dat' onChange={(index)=>getMulti(index.target.files)}></input>
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
@@ -157,11 +185,11 @@ let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
         </p>
 
         <div>
-          <div style={{float: 'left'}}>
+          <div style={{float: 'left'}} hidden={!hide}>
             <h2>Original Image Colors</h2>
             <ColorList colorList={colorsFromAPIOriginal}></ColorList>
           </div>
-          <div style={{float: 'left'}}>
+          <div style={{float: 'left'}} hidden={!hide}>
             <h2>Converted Image Colors</h2>
             <ColorList colorList={colorsFromAPIConverted}></ColorList>
           </div>
