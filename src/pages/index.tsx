@@ -107,12 +107,6 @@ let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
 // Send file to the firebase on button click
 async function Upload() {
 
-  await getDownloadURL(storeFile).then(function(url){
-    setDoc(doc(db,'index',names),{
-    orginal: url,
-    });
-  });
-
   
   // Store url of firebase location using store ref
   await getDownloadURL(store).then(function(url){
