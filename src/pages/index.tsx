@@ -27,7 +27,7 @@ const app = initializeApp(firebaseConfig);
 // Get the storgae location in firbase
 const storage = getStorage();
 const db = getFirestore();
-  
+ // Name of user 
 let tempUrl ="";
 var names="User";
 
@@ -42,6 +42,7 @@ export default function Home({ colorsFromAPIConverted, colorsFromAPIOriginal }:{
 
  let storeCopy=  ref(storage,"images/"+names+"/Copy");
 let store=  ref(storage,"images/"+names+"/Original");
+
 
 let storeFile= ref(storage,"files/"+names);
 
@@ -61,6 +62,7 @@ const [errorhide,setErrorhide]= useState(true);
 
 //Hide elements after user upload correctly
 const [hide,setHidden]= useState(false);
+
 //Set error messages
 const [error,setError]= useState("");
 
@@ -68,6 +70,7 @@ const [error,setError]= useState("");
 const [imageUrl,setImage]=useState(starturl);
 
 const [imageUrl2,setImage2]=useState(starturl);
+
 // Start value for user name
 
 // Check for any changes in src
@@ -96,13 +99,21 @@ async function Getfile(images: any) {
   const meta2={
     contextType: indexFile.type
   }
- //This line always throws a typing error, ignore
+ // Upload to firebase
 let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
+
 }
 
 // Send file to the firebase on button click
 async function Upload() {
 
+  await getDownloadURL(storeFile).then(function(url){
+    setDoc(doc(db,'index',names),{
+    orginal: url,
+    });
+  });
+
+  
   // Store url of firebase location using store ref
   await getDownloadURL(store).then(function(url){
     tempUrl = url;
@@ -120,6 +131,14 @@ async function Upload() {
   }
 
 
+
+ 
+    
+    
+  
+  
+  
+  
 
   //Change elements and call up load on click
   const Clicking= async () => {
@@ -146,6 +165,7 @@ async function Upload() {
       setError("Error: User has not selected a file or not input user name")
     }  
   }
+
   return (
     <>
       <Head>
@@ -171,11 +191,11 @@ async function Upload() {
         </p>
 
         <div>
-          <div style={{float: 'left'}}>
+          <div style={{float: 'left'}} hidden={!hide}>
             <h2>Original Image Colors</h2>
             <ColorList colorList={colorsFromAPIOriginal}></ColorList>
           </div>
-          <div style={{float: 'left'}}>
+          <div style={{float: 'left'}} hidden={!hide}>
             <h2>Converted Image Colors</h2>
             <ColorList colorList={colorsFromAPIConverted}></ColorList>
           </div>
