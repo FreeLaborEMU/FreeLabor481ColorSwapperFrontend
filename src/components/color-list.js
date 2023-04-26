@@ -29,7 +29,8 @@ function rgbToHex(r, g, b) {
   
   function ColorListItem({color}) {
     return (
-      <li className={styles.colorListItem} onClick={handleClick(rgbToHex(Number(color.redValue), Number(color.greenValue), Number(color.blueValue)))}>
+      // <li className={styles.colorListItem} onClick={handleClick(rgbToHex(Number(color.redValue), Number(color.greenValue), Number(color.blueValue)))}>
+      <li className={styles.colorListItem} onClick={() => handleClick(rgbToHex(Number(color.redValue), Number(color.greenValue), Number(color.blueValue)))}>
       {/* <li className={styles.colorListItem}> */}
 
         {/* Have to cast to Number, since stored as a string in the data object right now */}
@@ -41,14 +42,15 @@ function rgbToHex(r, g, b) {
 
   const handleClick = async (redValue, greenValue, blueValue) => {
     // const response = await fetch('http://localhost:8080/colorConversion/keepColorFromOriginal', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({ redValue, greenValue, blueValue })
-    // });
+    const response = await fetch('http://localhost:8080/hello/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ redValue, greenValue, blueValue })
+    });
     // There is no response yet
-    // const data = await response.json();
+    const data = await response.json();
     // handle response data
   }
 
