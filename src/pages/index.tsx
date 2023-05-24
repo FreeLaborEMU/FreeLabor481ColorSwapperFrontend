@@ -107,9 +107,8 @@ let uploadFile=await uploadBytesResumable(storeFile, indexFile, meta2);
 // Send file to the firebase on button click
 async function Upload() {
 
-  
-  // Store url of firebase location using store ref
-  await getDownloadURL(store).then(function(url){
+   // Store url of firebase location using store ref
+   await getDownloadURL(store).then(function(url){
     tempUrl = url;
     setImage(url);
     setDoc(doc(db,'users',names),{
@@ -118,6 +117,7 @@ async function Upload() {
     username: names
     });
   });
+  
   await getDownloadURL(storeCopy).then(function(url2){
       setImage2(url2);
  
@@ -137,16 +137,20 @@ async function Upload() {
   //Change elements and call up load on click
   const Clicking= async () => {
    
-    const response = await fetch('http://localhost:8080/main/convert', {
-    
-    mode:'no-cors'
-  
-
-    });
-
     if(imageFile!=null && names!="" && indexFile!=null)
     { 
       Upload();
+    
+    
+    const  data= new URLSearchParams(tempUrl)
+    const response = await fetch('http://localhost:8080/main/convert'+data, {
+
+    mode:'no-cors'
+
+
+    });
+  
+     
       setErrorhide(true);
       setHidden(true);
       //Example of image being used
@@ -175,10 +179,20 @@ async function Upload() {
           <p color='red' hidden={errorhide}>{error} </p>
           <p hidden={hide} className={styles3.other}>Input User name and file to Convert</p>
           <p hidden={!hide}>Backlog Item 1 Space</p>
-          <input type='file' hidden={hide} accept='image./png' onChange={(images)=>Getfile(images.target.files)}></input>
-          <input type='file' hidden={hide} accept='dat' onChange={(index)=>getMulti(index.target.files)}></input>
+          
+          <label className= {styles3.uploadbtn} hidden={hide} > 
+          <img  hidden={hide} src='https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/enter.png?alt=media&token=631ff754-8d85-4dc0-8db6-7bb7af3edef3'height={300} width={300}/>
+          <input  hidden id="myupload" type='file'  accept='image/png, image/jpeg' onChange={(images)=>Getfile(images.target.files)}></input>
+          </label>
+         
+          <label className= {styles3.uploadbtn} hidden={hide}> 
+          <img  hidden={hide} src='https://firebasestorage.googleapis.com/v0/b/colorswapper-f6b50.appspot.com/o/enter.png?alt=media&token=631ff754-8d85-4dc0-8db6-7bb7af3edef3'height={300} width={300}/>
+          <input type='file' hidden accept='.dat' onChange={(index)=>getMulti(index.target.files)}></input>
+          </label>
+         
           <button  id="btn" hidden={hide} onClick={Clicking}  >Upload</button>
         </div>
+        
         <p>
           <img src={imageUrl} height={500} width={500} hidden={!hide}/>
           <img src={imageUrl2} height={500} width={500} hidden={!hide}/>
